@@ -1,0 +1,18 @@
+{
+  "name": "music-parser",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "start": "node index.js",
+    "updateTitle": "node update-title.js",
+    "convert-to-json": "node convert-to-json.js",
+    "recurse-read-files": "node recurse-read-files.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "node-id3": "^0.2.1"
+  }
+}
