@@ -11,7 +11,7 @@ async function splitByType(sourceFileName) {
     const { artist = 'Unknown', album = 'Unknown', genre = 'Unknown', year } = datum;
     let decade = '-';
     if (year) {
-      decade = year.replace(/.$/, '0');
+      decade = String(year).replace(/.$/, '0');
     } else {
       year = '-';
     }

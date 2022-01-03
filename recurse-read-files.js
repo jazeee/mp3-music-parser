@@ -1,6 +1,7 @@
 const { resolve } = require('path');
 const { readdir } = require('fs').promises;
-const { processFile } = require('./process-file');
+const { processMp3File, processMusicFile } = require('./process-file');
+const { isMusicFile } = require('./constants');
 
 const [,, givenDir] = process.argv;
 if (!givenDir) {
@@ -22,14 +23,30 @@ async function* getFiles(dir) {
 console.warn(`Parsing dir ${givenDir}`)
 ;(async () => {
   const results = [];
-  for await (const f of getFiles(givenDir)) {
-    if (f.toLowerCase().endsWith('.mp3')) {
-      const tags = await processFile(f);
-      delete tags.raw;
-      delete tags.image;
-      delete tags.private;
+  for await (const filename of getFiles(givenDir)) {
+    console.warn(`Processing ${filename}`);
+    const cleanFilename = filename.replace(givenDir, '').replace(/^\//, '')
+    // if (filename.toLowerCase().endsWith('.mp3')) {
+    //   const tags = await processMp3File(filename);
+    //   delete tags.raw;
+    //   delete tags.image;
+    //   delete tags.private;
+    //   results.push({
+    //     fileName: cleanFilename,
+    //     tags,
+    //   });
+    // } else
+    if (isMusicFile(filename)) {
+      const audioMetadata = await processMusicFile(filename);
+      const { common } = audioMetadata;
+      const { genre } = common;
+      const tags = {
+        ...common,
+        genre: genre?.[0] ?? 'Misc',
+        genres: genre,
+      };
       results.push({
-        fileName: f.replace(givenDir, '').replace(/^\//, ''),
+        fileName: cleanFilename,
         tags,
       });
     }

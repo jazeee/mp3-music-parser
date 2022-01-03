@@ -1,8 +1,14 @@
 const NodeID3 = require('node-id3').Promise;
+const musicMetadata = require('music-metadata');
 
-async function processFile(fileName) {
+async function processMp3File(fileName) {
   const tags = await NodeID3.read(fileName);
   return tags;
 }
 
-module.exports = { processFile };
+async function processMusicFile(filename) {
+  const tags = await musicMetadata.parseFile(filename);
+  return tags;
+}
+
+module.exports = { processMp3File, processMusicFile };
